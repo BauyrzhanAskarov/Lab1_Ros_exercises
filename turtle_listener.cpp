@@ -2,6 +2,7 @@
 
 #include "turtlesim/Pose.h"
 #include "geometry_msgs/Twist.h"
+#include "turtlesim/Spawn.h"
 
 ros::Publisher pub;
 void turtleCallback(const turtlesim::Pose::ConstPtr& msg)
@@ -34,9 +35,15 @@ int main (int argc, char **argv)
   
 
   ros::init(argc, argv, "turtlebot_subscriber");
-
   ros::NodeHandle nh;
   
+  ros::ServiceClient client1 = nh.serviceClient<turtlesim::Spawn>("/spawn");
+  turtlesim::Spawn srv1;
+  srv1.request.x = 1.0;
+  srv1.request.y = 5.0;
+  srv1.request.theta = 0.0;
+  srv1.request.name = "Turtle_Bauyrzhan”;
+  client1.call(srv1);
   // Define the subscriber to turtle's position
   
   ros::Subscriber sub = nh.subscribe("turtle1/pose", 1,turtleCallback);
